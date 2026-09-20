@@ -1,0 +1,14 @@
+Happy path:
+Given: Użytkownik ma poprawne dane i wszystkie wymagane pola są wypełnione
+When: Użytkownik wysyła formularz
+Then: Dane zostają poprawnie zapisane, a użytkownik otrzymuje komunikat o powodzeniu
+
+Błędne wyjście:
+Given: Jedno z wymaganych pól jest puste lub zawiera dane w złym formacie
+When: Użytkownik próbuje wysłać formularz
+Then: System odrzuca dane i wyświetla komunikat o błędzie
+
+Granica:
+Given: System osiągnął limit danych albo zewnętrzne API jest niedostępne
+When: Użytkownik wykonuje operację wymagjącą dostępu do API
+Then: System nie ulega awarii i wyświetla komunikat o niedostępności usługi 
