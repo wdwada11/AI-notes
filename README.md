@@ -1,4 +1,4 @@
-nazwa zespołu: 67
+nazwa zespołu: SigmaHub
 
 role: <br>
 Maciej Marcinkowski: Programista, tester <br>
