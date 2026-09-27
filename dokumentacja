@@ -1,0 +1,65 @@
+1. Diagram modułów
+
+Aplikacja składa się z następujących modułów:
+
+Użytkownik → Interfejs aplikacji → Moduł AI → Wynik
+
+Moduły:
+Interfejs użytkownika – wprowadzanie notatek i wyświetlanie wyniku.
+Moduł przetwarzania danych – odbiera tekst od użytkownika i przekazuje go do AI.
+Moduł AI – analizuje notatki i tworzy podsumowanie.
+Moduł wyników – wyświetla gotowe podsumowanie.
+Moduł eksportu – pozwala skopiować lub zapisać wynik.
+2. Przepływ danych
+
+Notatki użytkownika -> Interfejs aplikacji -> Moduł AI -> Analiza notatek -> Wygenerowanie podsumowania -> Wyświetlenie wyniku -> Kopiowanie / zapisanie 
+
+3. Wybór technologii + uzasadnienie 
+-.NET - platforma, na której działa aplikacja.
+- F# - język programowania używany do stworzenia aplikacji.
+- OpenAI to biblioteka SDK która umożliwia łatwą integrację z modelami sztucznej inteligencji od OpenAI.
+
+Uzasadnienie:
+- .NET wybraliśmy tę platformę ze względu na dużą wydajność, dobrą integrację z systemem Windows oraz Visual Studio. Dodatkowo .NET jest wieloplatformowy, dzięki czemu aplikacja może działać na różnych systemach.
+- F# wybrano, ponieważ jest prostym i czytelnym językiem działającym na platformie .NET.
+- OpenAI wybrano, ponieważ umożliwia łatwe dodanie AI.
+
+
+4. MVP + OUT
+MVP – podstawowa wersja aplikacji
+
+Aplikacja będzie posiadała:
+
+pole do wpisania notatek,
+przycisk „Streszczaj”,
+generowanie podsumowania przez AI,
+wyświetlenie podsumowania,
+możliwość skopiowania wyniku,
+komunikat przy pustym polu.
+
+OUT – czego nie robimy w pierwszej wersji
+logowania i kont użytkowników,
+historii wszystkich notatek,
+zaawansowanego formatowania,
+automatycznego zapisywania wszystkich notatek.
+
+5. Ryzyka + kontrakty modułów
+Ryzyka
+AI może pominąć ważne informacje.
+AI może błędnie zinterpretować notatkę.
+Zbyt długi tekst może przekroczyć limit.
+Brak połączenia z API uniemożliwi wygenerowanie podsumowania.
+Puste dane mogą spowodować błąd.
+Kontrakty modułów
+
+Interfejs -> Moduł AI:
+Przekazuje tekst notatek.
+
+Moduł AI -> Moduł wyników:
+Zwraca wygenerowane podsumowanie.
+
+Moduł wyników -> Użytkownik:
+Wyświetla podsumowanie.
+
+Moduł eksportu:
+Otrzymuje gotowe podsumowanie i pozwala je skopiować lub zapisać.
