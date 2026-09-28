@@ -1,8 +1,6 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,7 +8,7 @@ namespace AINoteSummarizer
 {
     public partial class MainWindow : Window
     {
-        private const string ApiKey = "TWOJ_KLUCZ_OPENAI_API";
+        private const string ApiKey = "sk-1234ijkl5678mnop1234ijkl5678mnop1234ijkl";
 
         private static readonly HttpClient _httpClient = new HttpClient();
 
@@ -42,7 +40,7 @@ namespace AINoteSummarizer
                 return;
             }
 
-            if (ApiKey == "TWOJ_KLUCZ_OPENAI_API")
+            if (string.IsNullOrWhiteSpace(ApiKey))
             {
                 MessageBox.Show(
                     "Uzupełnij klucz API OpenAI.",
