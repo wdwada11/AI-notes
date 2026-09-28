@@ -27,20 +27,25 @@ module Summarizer =
         | null -> ""
         | v -> v.Trim()
 
-    let private openAiKey () = env "OPENAI_API_KEY"
+    let private openAiKey () = Settings.apiKey ()
 
-    let private openAiModel () =
-        match env "OPENAI_MODEL" with
-        | "" -> "gpt-5-mini"
-        | m -> m
+    let private openAiModel () = Settings.model ()
 
-    /// OpenAI, gdy ustawiono OPENAI_API_KEY; w przeciwnym razie tryb lokalny.
+    /// Chmura (OpenAI lub inny serwis zgodny z API OpenAI), gdy jest klucz (zapisany w aplikacji lub w OPENAI_API_KEY); w przeciwnym razie tryb lokalny.
     let activeProvider () =
         if openAiKey () <> "" then OpenAI else Local
 
+    /// Nazwa hosta z adresu API, np. "api.groq.com".
+    let private hostName () =
+        try Uri(Settings.baseUrl ()).Host with _ -> "API"
+
     let providerLabel () =
         match activeProvider () with
-        | OpenAI -> "OpenAI Online"
+        | OpenAI ->
+            let h = hostName ()
+            if h = "api.openai.com" then "OpenAI Online"
+            elif h = "api.groq.com" then "Groq Online"
+            else h + " Online"
         | Local -> "Tryb lokalny"
 
     // ---------- tryb lokalny (bez internetu / bez klucza) ----------
@@ -137,18 +142,18 @@ module Summarizer =
 
     let summarizeOpenAI (length: SummaryLength) (text: string) : Task<string> =
         task {
-            // Modele GPT-5 to modele rozumujace: uzywaja max_completion_tokens
-            // (nie max_tokens) i nie przyjmuja wlasnej temperatury.
+            // Celowo bez max_tokens / temperature: rozne serwisy zgodne z API OpenAI
+            // (i modele rozumujace) inaczej je traktuja, a domyslne wartosci dzialaja wszedzie.
             let body =
                 JsonSerializer.Serialize(
                     {| model = openAiModel ()
-                       max_completion_tokens = 4000
                        messages =
                         [| {| role = "system"; content = systemPrompt length |}
                            {| role = "user"; content = text |} |] |}
                 )
 
-            use req = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/chat/completions")
+            let url = (Settings.baseUrl ()).TrimEnd('/') + "/chat/completions"
+            use req = new HttpRequestMessage(HttpMethod.Post, url)
             req.Headers.Add("Authorization", "Bearer " + openAiKey ())
             req.Content <- new StringContent(body, Encoding.UTF8, "application/json")
 
@@ -177,11 +182,11 @@ module Summarizer =
             match activeProvider () with
             | Local ->
                 return { Text = summarizeLocal length text
-                         Source = "tryb lokalny (ustaw OPENAI_API_KEY, aby użyć OpenAI)" }
+                         Source = "tryb lokalny (dodaj klucz przyciskiem „Klucz API”)" }
             | OpenAI ->
                 try
                     let! r = summarizeOpenAI length text
-                    return { Text = r; Source = $"OpenAI ({openAiModel ()})" }
+                    return { Text = r; Source = $"{hostName ()} ({openAiModel ()})" }
                 with ex ->
                     let msg =
                         if ex.Message.Length > 120 then ex.Message.Substring(0, 120) + "…" else ex.Message
