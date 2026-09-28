@@ -1,2 +1,0 @@
-C:\Users\Admin\Documents\GitHub\AI-notes\smartnotes F#\AINoteSummarizer\obj\Debug\net8.0\AINoteSummarizer.fsproj.AssemblyReference.cache
-C:\Users\Admin\Documents\GitHub\AI-notes\smartnotes F#\AINoteSummarizer\obj\Debug\net8.0\Avalonia\Resources.Inputs.cache

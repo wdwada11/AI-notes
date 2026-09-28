@@ -1,0 +1,453 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="AINoteSummarizer.MainWindow"
+    Title="NoteAI"
+    Width="1250"
+    Height="780"
+    MinWidth="950"
+    MinHeight="660"
+    WindowStartupLocation="CenterScreen"
+    Background="#0B0C10">
+
+    <Window.Styles>
+
+        <!-- ===== TextBox (przezroczysty; tlo daje otaczajacy Border) ===== -->
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#ECECF1"/>
+            <Setter Property="CaretBrush" Value="#A898FF"/>
+            <Setter Property="SelectionBrush" Value="#557C5CFC"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="LineHeight" Value="23"/>
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement, TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <!-- ===== Pole edytora (ramka reaguje na fokus) ===== -->
+        <Style Selector="Border.editor">
+            <Setter Property="Background" Value="#0E1015"/>
+            <Setter Property="BorderBrush" Value="#22252F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="14"/>
+        </Style>
+        <Style Selector="Border.editor:focus-within">
+            <Setter Property="BorderBrush" Value="#7C5CFC"/>
+        </Style>
+
+        <!-- ===== Karty ===== -->
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="#F0151720"/>
+            <Setter Property="BorderBrush" Value="#262936"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="22"/>
+            <Setter Property="Padding" Value="22"/>
+            <Setter Property="BoxShadow" Value="0 18 48 0 #66000000"/>
+        </Style>
+
+        <Style Selector="Border.badge">
+            <Setter Property="Width" Value="34"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Background" Value="#2A7C5CFC"/>
+            <Setter Property="Margin" Value="0,0,12,0"/>
+        </Style>
+
+        <Style Selector="Border.pill">
+            <Setter Property="Background" Value="#1B1D27"/>
+            <Setter Property="BorderBrush" Value="#2A2D3A"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+        <!-- ===== ComboBox ===== -->
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#1B1D27"/>
+            <Setter Property="BorderBrush" Value="#2A2D3A"/>
+            <Setter Property="Foreground" Value="#ECECF1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="14,9"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="ComboBox:pointerover /template/ Border#Background, ComboBox:pressed /template/ Border#Background">
+            <Setter Property="Background" Value="#252836"/>
+        </Style>
+
+        <!-- ===== Przyciski ===== -->
+        <Style Selector="Button">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style Selector="Button.ghost">
+            <Setter Property="Background" Value="#1B1D27"/>
+            <Setter Property="Foreground" Value="#C9C2FF"/>
+            <Setter Property="BorderBrush" Value="#2A2D3A"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16,8"/>
+        </Style>
+        <Style Selector="Button.ghost:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#262938"/>
+            <Setter Property="BorderBrush" Value="#7C5CFC"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style Selector="Button.primary /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Color="#8B6BFF" Offset="0"/>
+                    <GradientStop Color="#6A4BEA" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="14"/>
+        </Style>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#7C5CFC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="CornerRadius" Value="14"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Color="#9C80FF" Offset="0"/>
+                    <GradientStop Color="#7A5CF5" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.primary:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#3A3170"/>
+            <Setter Property="Foreground" Value="#9C9CB0"/>
+        </Style>
+
+        <Style Selector="Button.link">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#8B78FF"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="14,8"/>
+        </Style>
+        <Style Selector="Button.link:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#22252F"/>
+            <Setter Property="Foreground" Value="#B5A8FF"/>
+        </Style>
+
+    </Window.Styles>
+
+    <Grid>
+
+        <!-- ===== TLO: gradient + poswiata ===== -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                <GradientStop Color="#0B0C10" Offset="0"/>
+                <GradientStop Color="#120F24" Offset="0.6"/>
+                <GradientStop Color="#0B0C10" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Ellipse
+            Width="720" Height="720"
+            HorizontalAlignment="Left" VerticalAlignment="Top"
+            Margin="-260,-320,0,0"
+            IsHitTestVisible="False">
+            <Ellipse.Fill>
+                <RadialGradientBrush Center="50%,50%" GradientOrigin="50%,50%" RadiusX="50%" RadiusY="50%">
+                    <GradientStop Color="#447C5CFC" Offset="0"/>
+                    <GradientStop Color="#007C5CFC" Offset="1"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+
+        <Ellipse
+            Width="620" Height="620"
+            HorizontalAlignment="Right" VerticalAlignment="Bottom"
+            Margin="0,0,-240,-300"
+            IsHitTestVisible="False">
+            <Ellipse.Fill>
+                <RadialGradientBrush Center="50%,50%" GradientOrigin="50%,50%" RadiusX="50%" RadiusY="50%">
+                    <GradientStop Color="#33338DFF" Offset="0"/>
+                    <GradientStop Color="#00338DFF" Offset="1"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+
+        <!-- ===== TRESC ===== -->
+        <Grid RowDefinitions="Auto,*,Auto" Margin="36,30,36,32">
+
+            <!-- HEADER -->
+            <Grid Grid.Row="0" Margin="0,0,0,26">
+
+                <StackPanel Orientation="Horizontal">
+
+                    <Border
+                        Width="48" Height="48"
+                        CornerRadius="14"
+                        Margin="0,0,16,0"
+                        BoxShadow="0 8 28 0 #667C5CFC">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                <GradientStop Color="#9C80FF" Offset="0"/>
+                                <GradientStop Color="#5B3FE0" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock
+                            Text="✦"
+                            Foreground="White"
+                            FontSize="26"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock
+                            Text="NoteAI"
+                            Foreground="#F4F4F8"
+                            FontSize="28"
+                            FontWeight="Bold"
+                            LetterSpacing="0.5"/>
+                        <TextBlock
+                            Text="Inteligentny skrót Twoich notatek"
+                            Foreground="#8C90A0"
+                            FontSize="13"/>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <Border Classes="pill" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse
+                            Name="AiStatusDot"
+                            Width="8" Height="8"
+                            Fill="#4ADE80"
+                            Margin="0,0,9,0"
+                            VerticalAlignment="Center"/>
+                        <TextBlock
+                            Name="AiStatusText"
+                            Text="AI Online"
+                            Foreground="#B4B6C2"
+                            FontSize="12"
+                            FontWeight="Medium"
+                            VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+
+            <!-- MAIN -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,56,*">
+
+                <!-- INPUT CARD -->
+                <Border Grid.Column="0" Classes="card">
+                    <Grid RowDefinitions="Auto,*,Auto">
+
+                        <Grid Grid.Row="0" Margin="0,0,0,16">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Classes="badge">
+                                    <TextBlock Text="📄" FontSize="16"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Twoja notatka"
+                                               Foreground="#F0F0F5" FontSize="16" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Oryginalny tekst"
+                                               Foreground="#7B7F90" FontSize="12"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Border Classes="pill" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock
+                                    Name="InputCounter"
+                                    Text="0 znaków"
+                                    Foreground="#9EA2B3"
+                                    FontSize="12"/>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="1" Classes="editor">
+                            <TextBox
+                                Name="InputTextBox"
+                                PlaceholderText="Wklej tutaj swoją notatkę…"
+                                AcceptsReturn="True"
+                                TextWrapping="Wrap"
+                                VerticalContentAlignment="Top"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        </Border>
+
+                        <Grid Grid.Row="2" Margin="0,16,0,0">
+                            <TextBlock
+                                Text="Wklej tekst, który chcesz skrócić"
+                                Foreground="#6C7080"
+                                FontSize="12"
+                                VerticalAlignment="Center"/>
+                            <Button
+                                Name="ClearButton"
+                                Classes="link"
+                                Content="WYCZYŚĆ"
+                                HorizontalAlignment="Right"/>
+                        </Grid>
+
+                    </Grid>
+                </Border>
+
+                <!-- STRZALKA -->
+                <Border
+                    Grid.Column="1"
+                    Width="40" Height="40"
+                    CornerRadius="20"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderBrush="#33FFFFFF"
+                    BorderThickness="1"
+                    BoxShadow="0 6 22 0 #557C5CFC">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                            <GradientStop Color="#8B6BFF" Offset="0"/>
+                            <GradientStop Color="#5B3FE0" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <TextBlock
+                        Text="→"
+                        Foreground="White"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+                </Border>
+
+                <!-- OUTPUT CARD -->
+                <Border Grid.Column="2" Classes="card">
+                    <Grid RowDefinitions="Auto,*,Auto">
+
+                        <Grid Grid.Row="0" Margin="0,0,0,16">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Classes="badge">
+                                    <TextBlock Text="✨" FontSize="16"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Skrócona notatka"
+                                               Foreground="#F0F0F5" FontSize="16" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Same najważniejsze informacje"
+                                               Foreground="#7B7F90" FontSize="12"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Border
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                CornerRadius="20"
+                                Padding="12,6">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                        <GradientStop Color="#337C5CFC" Offset="0"/>
+                                        <GradientStop Color="#22338DFF" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <TextBlock
+                                    Text="WYNIK AI"
+                                    Foreground="#B5A8FF"
+                                    FontSize="11"
+                                    FontWeight="Bold"
+                                    LetterSpacing="1"/>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="1" Classes="editor">
+                            <TextBox
+                                Name="OutputTextBox"
+                                PlaceholderText="Tutaj pojawi się skrót Twojej notatki…"
+                                IsReadOnly="True"
+                                AcceptsReturn="True"
+                                TextWrapping="Wrap"
+                                VerticalContentAlignment="Top"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        </Border>
+
+                        <Grid Grid.Row="2" Margin="0,16,0,0">
+                            <TextBlock
+                                Text="Skopiuj wynik jednym kliknięciem"
+                                Foreground="#6C7080"
+                                FontSize="12"
+                                VerticalAlignment="Center"/>
+                            <Button
+                                Name="CopyButton"
+                                Classes="ghost"
+                                Content="📋  KOPIUJ"
+                                HorizontalAlignment="Right"/>
+                        </Grid>
+
+                    </Grid>
+                </Border>
+
+            </Grid>
+
+            <!-- BOTTOM BAR -->
+            <Border
+                Grid.Row="2"
+                Margin="0,22,0,0"
+                Background="#E6151720"
+                BorderBrush="#262936"
+                BorderThickness="1"
+                CornerRadius="20"
+                Padding="20,14"
+                BoxShadow="0 14 40 0 #55000000">
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock
+                            Text="Długość skrótu"
+                            Foreground="#A4A7B6"
+                            FontSize="13"
+                            VerticalAlignment="Center"
+                            Margin="0,0,14,0"/>
+
+                        <ComboBox
+                            Name="LengthComboBox"
+                            Width="180"
+                            SelectedIndex="0">
+                            <ComboBoxItem Content="Krótka"/>
+                            <ComboBoxItem Content="Średnia"/>
+                            <ComboBoxItem Content="Szczegółowa"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <TextBlock
+                        Grid.Column="1"
+                        Name="StatusTextBlock"
+                        Text="Gotowe"
+                        Foreground="#7B7F90"
+                        FontSize="12"
+                        Margin="24,0,24,0"
+                        VerticalAlignment="Center"
+                        TextTrimming="CharacterEllipsis"/>
+
+                    <Border
+                        Grid.Column="2"
+                        CornerRadius="14"
+                        BoxShadow="0 10 30 0 #667C5CFC">
+                        <Button
+                            Name="SummarizeButton"
+                            Classes="primary"
+                            Content="✦   SKRÓĆ ZA POMOCĄ AI"
+                            Width="250"
+                            Height="50"/>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Grid>
+
+</Window>
