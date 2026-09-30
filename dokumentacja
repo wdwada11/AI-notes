@@ -17,12 +17,15 @@ Notatki użytkownika -> Interfejs aplikacji -> Moduł AI -> Analiza notatek -> W
 3. Wybór technologii + uzasadnienie 
 -.NET - platforma, na której działa aplikacja.
 - F# - język programowania używany do stworzenia aplikacji.
-- OpenAI to biblioteka SDK która umożliwia łatwą integrację z modelami sztucznej inteligencji od OpenAI.
+- Avalonia UI - framework służący do stworzenia graficznego interfejsu aplikacji.
+- Groq - usługa umożliwiająca szybką integracje aplkacji z modelami sztucznej inteligencji.
 
 Uzasadnienie:
 - .NET wybraliśmy tę platformę ze względu na dużą wydajność, dobrą integrację z systemem Windows oraz Visual Studio. Dodatkowo .NET jest wieloplatformowy, dzięki czemu aplikacja może działać na różnych systemach.
 - F# wybrano, ponieważ jest prostym i czytelnym językiem działającym na platformie .NET.
-- OpenAI wybrano, ponieważ umożliwia łatwe dodanie AI.
+- Avalonia UI wybraliśmy, ponieważ pozwala stworzyć ładny i nowoczesny interfejs aplikacji.
+- Groq wybraliśmy, ponieważ oferuje darmowy dostęp do API, dzięki czemu możemy wykorzystać AI w aplikacji bez ponoszenia kosztów.
+
 
 
 4. MVP + OUT
