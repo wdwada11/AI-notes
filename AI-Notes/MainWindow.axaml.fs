@@ -58,13 +58,6 @@ type MainWindow() as this =
         aiDot.Fill <- SolidColorBrush(Color.Parse color) :> IBrush
         keyStatus.Text <- $"Źródło klucza: {Settings.keySource ()}"
 
-    let updateHint () =
-        keyHint.Text <-
-            match providerBox.SelectedIndex with
-            | 0 -> "Klucz OpenAI: platform.openai.com/api-keys (konto API wymaga doładowania środków)."
-            | 1 -> "Darmowy klucz bez karty: console.groq.com/keys (wystarczy e-mail). Nazwę modelu możesz zmienić."
-            | _ -> "Wpisz adres serwisu zgodnego z API OpenAI (kończący się na /v1) oraz nazwę modelu."
-
     let saveSettings () =
         let key = (textOf keyBox).Trim()
         let url = (textOf urlBox).Trim()
@@ -176,7 +169,7 @@ type MainWindow() as this =
                     modelBox.Text <- "openai/gpt-oss-120b"
                 | _ -> ()
 
-                updateHint ())
+                )
 
         // stan poczatkowy pol z zapisanych ustawien
         let url = Settings.baseUrl ()
@@ -189,4 +182,3 @@ type MainWindow() as this =
             else 2
 
         loading <- false
-        updateHint ()

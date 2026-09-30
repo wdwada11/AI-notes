@@ -309,7 +309,7 @@
                         Margin="0,14,20,0"
                         SelectedIndex="0">
                         <ComboBoxItem Content="OpenAI"/>
-                        <ComboBoxItem Content="Groq (darmowy, bez karty)"/>
+                        <ComboBoxItem Content="Groq"/>
                         <ComboBoxItem Content="Własny adres"/>
                     </ComboBox>
 
