@@ -1,11 +1,16 @@
 namespace AINoteSummarizer
 
+open System
+open System.Diagnostics
+open System.IO
+open System.Text
 open Avalonia.Controls
 open Avalonia.Controls.Shapes
 open Avalonia.Input
 open Avalonia.Input.Platform
 open Avalonia.Markup.Xaml
 open Avalonia.Media
+open Avalonia.Platform.Storage
 
 type MainWindow() as this =
     inherit Window()
@@ -19,6 +24,8 @@ type MainWindow() as this =
     let summarizeButton = this.FindControl<Button>("SummarizeButton")
     let clearButton = this.FindControl<Button>("ClearButton")
     let copyButton = this.FindControl<Button>("CopyButton")
+    let saveButton = this.FindControl<Button>("SaveButton")
+    let printButton = this.FindControl<Button>("PrintButton")
     let lengthBox = this.FindControl<ComboBox>("LengthComboBox")
     let aiLabel = this.FindControl<TextBlock>("AiStatusText")
     let aiDot = this.FindControl<Ellipse>("AiStatusDot")
@@ -116,6 +123,82 @@ type MainWindow() as this =
                 summarizeButton.IsEnabled <- true
         }
 
+    let save () =
+        task {
+            let text = textOf outputBox
+
+            if text.Trim().Length = 0 then
+                status.Text <- "Brak wyniku do zapisania."
+            else
+                let topLevel = TopLevel.GetTopLevel this
+
+                match topLevel with
+                | null -> status.Text <- "Nie można otworzyć okna zapisu."
+                | topLevel ->
+                    let options = FilePickerSaveOptions()
+                    options.Title <- "Zapisz skróconą notatkę"
+                    options.SuggestedFileName <- "skrocona-notatka.txt"
+                    options.DefaultExtension <- "txt"
+
+                    options.FileTypeChoices <-
+                        ResizeArray(
+                            [ FilePickerFileType("Plik tekstowy", Patterns = ResizeArray [ "*.txt" ])
+                              FilePickerFileType("Markdown", Patterns = ResizeArray [ "*.md" ]) ]
+                        )
+
+                    let! file = topLevel.StorageProvider.SaveFilePickerAsync options
+
+                    match file with
+                    | null -> status.Text <- "Zapis anulowany."
+                    | file ->
+                        try
+                            use! stream = file.OpenWriteAsync()
+                            use writer = new StreamWriter(stream, Encoding.UTF8)
+                            do! writer.WriteAsync text
+                            status.Text <- $"Zapisano: {file.Name}"
+                        with ex ->
+                            status.Text <- $"Nie udało się zapisać pliku: {ex.Message}"
+        }
+
+    let print () =
+        task {
+            let text = textOf outputBox
+
+            if text.Trim().Length = 0 then
+                status.Text <- "Brak wyniku do wydrukowania."
+            else
+                try
+                    let html =
+                        let body =
+                            text
+                                .Replace("&", "&amp;")
+                                .Replace("<", "&lt;")
+                                .Replace(">", "&gt;")
+                                .Replace("\n", "<br/>")
+
+                        $"""<!DOCTYPE html>
+<html lang="pl"><head><meta charset="utf-8"/><title>Skrócona notatka</title>
+<style>
+  body {{ font-family: Segoe UI, Arial, sans-serif; font-size: 14pt; line-height: 1.5; margin: 40px; white-space: pre-wrap; }}
+  h1 {{ font-size: 16pt; }}
+</style></head>
+<body>
+<h1>Skrócona notatka</h1>
+<div>{body}</div>
+<script>window.onload = function() {{ window.print(); }};</script>
+</body></html>"""
+
+                    let path = Path.Combine(Path.GetTempPath(), $"notatka-{Guid.NewGuid():N}.html")
+                    File.WriteAllText(path, html, Encoding.UTF8)
+
+                    let psi = ProcessStartInfo(path, UseShellExecute = true)
+                    Process.Start psi |> ignore
+
+                    status.Text <- "Otworzono w przeglądarce — wydrukuj przez Ctrl+P."
+                with ex ->
+                    status.Text <- $"Nie udało się otworzyć wydruku: {ex.Message}"
+        }
+
     let copy () =
         task {
             let text = textOf outputBox
@@ -143,6 +226,8 @@ type MainWindow() as this =
             status.Text <- "Wyczyszczono.")
 
         copyButton.Click.Add(fun _ -> copy () |> ignore)
+        saveButton.Click.Add(fun _ -> save () |> ignore)
+        printButton.Click.Add(fun _ -> print () |> ignore)
         summarizeButton.Click.Add(fun _ -> summarize () |> ignore)
 
         keyButton.Click.Add(fun _ ->

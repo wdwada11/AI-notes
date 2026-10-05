@@ -12,7 +12,7 @@
 
     <Window.Styles>
 
-        <!-- ===== TextBox (przezroczysty; tlo daje otaczajacy Border) ===== -->
+        <!-- TEXT BOX -->
         <Style Selector="TextBox">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#ECECF1"/>
@@ -28,7 +28,7 @@
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
 
-        <!-- ===== Pole edytora (ramka reaguje na fokus) ===== -->
+        <!-- EDITOR FIELD -->
         <Style Selector="Border.editor">
             <Setter Property="Background" Value="#0E1015"/>
             <Setter Property="BorderBrush" Value="#22252F"/>
@@ -39,7 +39,7 @@
             <Setter Property="BorderBrush" Value="#7C5CFC"/>
         </Style>
 
-        <!-- ===== Karty ===== -->
+        <!-- CARDS -->
         <Style Selector="Border.card">
             <Setter Property="Background" Value="#F0151720"/>
             <Setter Property="BorderBrush" Value="#262936"/>
@@ -66,6 +66,7 @@
         </Style>
 
         <!-- ===== ComboBox ===== -->
+        <!-- COMBOBOX -->
         <Style Selector="ComboBox">
             <Setter Property="Background" Value="#1B1D27"/>
             <Setter Property="BorderBrush" Value="#2A2D3A"/>
@@ -78,7 +79,7 @@
             <Setter Property="Background" Value="#252836"/>
         </Style>
 
-        <!-- ===== Przyciski ===== -->
+        <!-- BUTTONS -->
         <Style Selector="Button">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -146,7 +147,6 @@
 
     <Grid>
 
-        <!-- ===== TLO: gradient + poswiata ===== -->
         <Grid.Background>
             <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
                 <GradientStop Color="#0B0C10" Offset="0"/>
@@ -181,7 +181,7 @@
             </Ellipse.Fill>
         </Ellipse>
 
-        <!-- ===== TRESC ===== -->
+        <!-- CONTENT -->
         <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="36,30,36,32">
 
             <!-- HEADER -->
@@ -254,7 +254,7 @@
 
             </Grid>
 
-            <!-- PANEL USTAWIEN API -->
+            <!-- API SETTINGS -->
             <Border
                 Grid.Row="1"
                 Name="KeyPanel"
@@ -402,7 +402,6 @@
                     </Grid>
                 </Border>
 
-                <!-- STRZALKA -->
                 <Border
                     Grid.Column="1"
                     Width="40" Height="40"
@@ -478,15 +477,24 @@
 
                         <Grid Grid.Row="2" Margin="0,16,0,0">
                             <TextBlock
-                                Text="Skopiuj wynik jednym kliknięciem"
+                                Text="Zapisz, wydrukuj albo skopiuj wynik"
                                 Foreground="#6C7080"
-                                FontSize="12"
+                                FontSize="10"
                                 VerticalAlignment="Center"/>
-                            <Button
-                                Name="CopyButton"
-                                Classes="ghost"
-                                Content="📋  KOPIUJ"
-                                HorizontalAlignment="Right"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                                <Button
+                                    Name="PrintButton"
+                                    Classes="ghost"
+                                    Content="🖨️  DRUKUJ"/>
+                                <Button
+                                    Name="SaveButton"
+                                    Classes="ghost"
+                                    Content="💾  ZAPISZ"/>
+                                <Button
+                                    Name="CopyButton"
+                                    Classes="ghost"
+                                    Content="📋  KOPIUJ"/>
+                            </StackPanel>
                         </Grid>
 
                     </Grid>
