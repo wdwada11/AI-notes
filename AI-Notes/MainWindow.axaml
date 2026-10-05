@@ -65,8 +65,7 @@
             <Setter Property="Padding" Value="12,6"/>
         </Style>
 
-        <!-- ===== ComboBox ===== -->
-        <!-- COMBOBOX -->
+        <!-- COMBO BOX -->
         <Style Selector="ComboBox">
             <Setter Property="Background" Value="#1B1D27"/>
             <Setter Property="BorderBrush" Value="#2A2D3A"/>
