@@ -5,9 +5,6 @@ open System.IO
 open System.Security.Cryptography
 open System.Text
 
-/// Przechowywanie klucza API OpenAI zapisanego w aplikacji.
-/// Windows: klucz szyfrowany DPAPI (dostepny tylko dla biezacego uzytkownika).
-/// Linux/macOS: plik w katalogu uzytkownika z uprawnieniami tylko dla wlasciciela.
 module Settings =
 
     let private dir =
@@ -34,8 +31,6 @@ module Settings =
 
     let mutable private savedKey = load ()
 
-    // ---- adres API i model (zwykly plik tekstowy, nie sa tajne) ----
-
     let defaultBaseUrl = "https://api.openai.com/v1"
     let defaultModel = "gpt-5-mini"
 
@@ -59,7 +54,6 @@ module Settings =
         | null -> ""
         | v -> v.Trim()
 
-    /// Adres API zgodnego z formatem OpenAI (zapisany > OPENAI_BASE_URL > domyslny).
     let baseUrl () : string =
         match fst savedConfig with
         | "" ->
@@ -68,7 +62,6 @@ module Settings =
             | u -> u
         | u -> u
 
-    /// Nazwa modelu (zapisana > OPENAI_MODEL > domyslna).
     let model () : string =
         match snd savedConfig with
         | "" ->
@@ -87,10 +80,8 @@ module Settings =
         | null -> ""
         | v -> v.Trim()
 
-    /// Klucz zapisany w aplikacji ma pierwszenstwo przed zmienna OPENAI_API_KEY.
     let apiKey () : string = if savedKey <> "" then savedKey else envKey ()
 
-    /// Skad pochodzi aktualny klucz (do wyswietlenia w ustawieniach).
     let keySource () : string =
         if savedKey <> "" then "zapisany w aplikacji"
         elif envKey () <> "" then "ze zmiennej OPENAI_API_KEY"

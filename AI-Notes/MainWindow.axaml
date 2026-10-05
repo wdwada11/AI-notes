@@ -8,11 +8,11 @@
     MinWidth="950"
     MinHeight="660"
     WindowStartupLocation="CenterScreen"
+    Icon="avares://AINoteSummarizer/Assets/icon.ico"
     Background="#0B0C10">
 
     <Window.Styles>
 
-        <!-- TEXT BOX -->
         <Style Selector="TextBox">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#ECECF1"/>
@@ -28,7 +28,6 @@
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
 
-        <!-- EDITOR FIELD -->
         <Style Selector="Border.editor">
             <Setter Property="Background" Value="#0E1015"/>
             <Setter Property="BorderBrush" Value="#22252F"/>
@@ -39,7 +38,6 @@
             <Setter Property="BorderBrush" Value="#7C5CFC"/>
         </Style>
 
-        <!-- CARDS -->
         <Style Selector="Border.card">
             <Setter Property="Background" Value="#F0151720"/>
             <Setter Property="BorderBrush" Value="#262936"/>
@@ -65,7 +63,6 @@
             <Setter Property="Padding" Value="12,6"/>
         </Style>
 
-        <!-- COMBO BOX -->
         <Style Selector="ComboBox">
             <Setter Property="Background" Value="#1B1D27"/>
             <Setter Property="BorderBrush" Value="#2A2D3A"/>
@@ -78,7 +75,6 @@
             <Setter Property="Background" Value="#252836"/>
         </Style>
 
-        <!-- BUTTONS -->
         <Style Selector="Button">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -180,10 +176,8 @@
             </Ellipse.Fill>
         </Ellipse>
 
-        <!-- CONTENT -->
         <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="36,30,36,32">
 
-            <!-- HEADER -->
             <Grid Grid.Row="0" Margin="0,0,0,26">
 
                 <StackPanel Orientation="Horizontal">
@@ -227,7 +221,7 @@
                 <Button
                     Name="KeyButton"
                     Classes="ghost"
-                    Content="🔑  Klucz API"
+                    Content="Klucz API"
                     Margin="0,0,12,0"
                     VerticalAlignment="Center"/>
 
@@ -253,7 +247,6 @@
 
             </Grid>
 
-            <!-- API SETTINGS -->
             <Border
                 Grid.Row="1"
                 Name="KeyPanel"
@@ -308,7 +301,7 @@
                         Margin="0,14,20,0"
                         SelectedIndex="0">
                         <ComboBoxItem Content="OpenAI"/>
-                        <ComboBoxItem Content="Groq"/>
+                        <ComboBoxItem Content="Groq (darmowy, bez karty)"/>
                         <ComboBoxItem Content="Własny adres"/>
                     </ComboBox>
 
@@ -345,17 +338,15 @@
                 </Grid>
             </Border>
 
-            <!-- MAIN -->
             <Grid Grid.Row="2" ColumnDefinitions="*,56,*">
 
-                <!-- INPUT CARD -->
                 <Border Grid.Column="0" Classes="card">
                     <Grid RowDefinitions="Auto,*,Auto">
 
                         <Grid Grid.Row="0" Margin="0,0,0,16">
                             <StackPanel Orientation="Horizontal">
                                 <Border Classes="badge">
-                                    <TextBlock Text="📄" FontSize="16"
+                                    <TextBlock Text="N" FontSize="15" FontWeight="Bold"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                                 <StackPanel VerticalAlignment="Center">
@@ -425,14 +416,13 @@
                         VerticalAlignment="Center"/>
                 </Border>
 
-                <!-- OUTPUT CARD -->
                 <Border Grid.Column="2" Classes="card">
                     <Grid RowDefinitions="Auto,*,Auto">
 
                         <Grid Grid.Row="0" Margin="0,0,0,16">
                             <StackPanel Orientation="Horizontal">
                                 <Border Classes="badge">
-                                    <TextBlock Text="✨" FontSize="16"
+                                    <TextBlock Text="S" FontSize="15" FontWeight="Bold"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                                 <StackPanel VerticalAlignment="Center">
@@ -478,21 +468,21 @@
                             <TextBlock
                                 Text="Zapisz, wydrukuj albo skopiuj wynik"
                                 Foreground="#6C7080"
-                                FontSize="10"
+                                FontSize="12"
                                 VerticalAlignment="Center"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
                                 <Button
                                     Name="PrintButton"
                                     Classes="ghost"
-                                    Content="🖨️  DRUKUJ"/>
+                                    Content="DRUKUJ"/>
                                 <Button
                                     Name="SaveButton"
                                     Classes="ghost"
-                                    Content="💾  ZAPISZ"/>
+                                    Content="ZAPISZ"/>
                                 <Button
                                     Name="CopyButton"
                                     Classes="ghost"
-                                    Content="📋  KOPIUJ"/>
+                                    Content="KOPIUJ"/>
                             </StackPanel>
                         </Grid>
 
@@ -501,7 +491,6 @@
 
             </Grid>
 
-            <!-- BOTTOM BAR -->
             <Border
                 Grid.Row="3"
                 Margin="0,22,0,0"
@@ -549,7 +538,7 @@
                         <Button
                             Name="SummarizeButton"
                             Classes="primary"
-                            Content="✦   SKRÓĆ ZA POMOCĄ AI"
+                            Content="SKRÓĆ ZA POMOCĄ AI"
                             Width="250"
                             Height="50"/>
                     </Border>

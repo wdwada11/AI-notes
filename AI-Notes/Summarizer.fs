@@ -20,8 +20,6 @@ type SummaryResult = { Text: string; Source: string }
 
 module Summarizer =
 
-    // ---------- konfiguracja (zmienne srodowiskowe) ----------
-
     let private env (name: string) =
         match Environment.GetEnvironmentVariable name with
         | null -> ""
@@ -31,11 +29,9 @@ module Summarizer =
 
     let private openAiModel () = Settings.model ()
 
-    /// Chmura (OpenAI lub inny serwis zgodny z API OpenAI), gdy jest klucz (zapisany w aplikacji lub w OPENAI_API_KEY); w przeciwnym razie tryb lokalny.
     let activeProvider () =
         if openAiKey () <> "" then OpenAI else Local
 
-    /// Nazwa hosta z adresu API, np. "api.groq.com".
     let private hostName () =
         try Uri(Settings.baseUrl ()).Host with _ -> "API"
 
@@ -47,8 +43,6 @@ module Summarizer =
             elif h = "api.groq.com" then "Groq Online"
             else h + " Online"
         | Local -> "Tryb lokalny"
-
-    // ---------- tryb lokalny (bez internetu / bez klucza) ----------
 
     let private stopWords =
         set [ "i"; "w"; "z"; "na"; "do"; "że"; "się"; "to"; "jest"; "nie"; "po"; "za"; "od"
@@ -103,8 +97,6 @@ module Summarizer =
             |> Array.map (fun i -> "• " + sentences.[i])
             |> String.concat "\n"
 
-    // ---------- wspolne dla trybu AI ----------
-
     let private http = new HttpClient(Timeout = TimeSpan.FromSeconds 90.0)
 
     let private systemPrompt (length: SummaryLength) =
@@ -119,7 +111,6 @@ module Summarizer =
         + " Odpowiadaj w tym samym języku, w którym napisana jest notatka. "
         + "Nie dodawaj wstępu ani komentarza - zwróć wyłącznie streszczenie."
 
-    /// OpenAI zwraca bledy jako {"error": {"message": "..."}}.
     let private extractError (json: string) =
         try
             use doc = JsonDocument.Parse json
@@ -138,12 +129,8 @@ module Summarizer =
                 return json
         }
 
-    // ---------- OpenAI (Chat Completions) ----------
-
     let summarizeOpenAI (length: SummaryLength) (text: string) : Task<string> =
         task {
-            // Celowo bez max_tokens / temperature: rozne serwisy zgodne z API OpenAI
-            // (i modele rozumujace) inaczej je traktuja, a domyslne wartosci dzialaja wszedzie.
             let body =
                 JsonSerializer.Serialize(
                     {| model = openAiModel ()
@@ -173,10 +160,6 @@ module Summarizer =
             | c -> return c.Trim()
         }
 
-    // ---------- punkt wejscia ----------
-
-    /// Uzywa OpenAI, gdy jest klucz. Przy bledzie API wraca do trybu lokalnego,
-    /// zeby aplikacja zawsze zwrocila wynik, a blad pokazuje w statusie.
     let summarize (length: SummaryLength) (text: string) : Task<SummaryResult> =
         task {
             match activeProvider () with

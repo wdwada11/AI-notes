@@ -30,7 +30,6 @@ type MainWindow() as this =
     let aiLabel = this.FindControl<TextBlock>("AiStatusText")
     let aiDot = this.FindControl<Ellipse>("AiStatusDot")
 
-    // panel klucza API
     let keyButton = this.FindControl<Button>("KeyButton")
     let keyPanel = this.FindControl<Border>("KeyPanel")
     let keyBox = this.FindControl<TextBox>("ApiKeyTextBox")
@@ -256,7 +255,6 @@ type MainWindow() as this =
 
                 )
 
-        // stan poczatkowy pol z zapisanych ustawien
         let url = Settings.baseUrl ()
         urlBox.Text <- url
         modelBox.Text <- Settings.model ()
